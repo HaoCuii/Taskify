@@ -4,9 +4,6 @@ import { CSS } from "@dnd-kit/utilities";
 const Task = ({ id, title }) => {
     const {attributes,listeners, setNodeRef, transform, transition} = useSortable({id});
 
-    console.log("transform",transform)
-    console.log("transition",transition)
-    
     const style = {transition,transform: CSS.Transform.toString(transform)};
     return (
       <div ref={setNodeRef} {...attributes} {...listeners} style={style}

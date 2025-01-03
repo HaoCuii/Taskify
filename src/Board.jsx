@@ -1,7 +1,8 @@
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import { useState } from "react";
-import Column from "./Column"; // Assuming you have a Column component to render tasks
+import Column from "./components/Column"; 
 import { arrayMove } from "@dnd-kit/sortable";
+import CreateTask from "./components/CreateTask";
 
 const Board = () => {
   const [tasks, setTasks] = useState([
@@ -10,13 +11,11 @@ const Board = () => {
     { id: 3, title: "Learn how to center a div" },
   ]);
 
-  // Corrected the comparison logic here
   const getTaskPos = (id) => tasks.findIndex((task) => task.id === id);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
-    // Corrected the return typo
     if (active.id === over.id) return;
 
     setTasks((tasks) => {
@@ -27,9 +26,20 @@ const Board = () => {
     });
   };
 
+  // Function to add a task (this will be passed to CreateTask)
+  const addTask = (taskContent) => {
+    const newTask = {
+      id: tasks.length + 1, // Generating a new ID based on the current task length
+      title: taskContent
+    };
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+  };
+
   return (
     <div className="w-full h-full flex justify-center items-center flex-col">
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl mt-10">Drag And Drop</h1>
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl mt-10">Task Board</h1>
+      {/* Pass addTask as a prop to CreateTask */}
+      <CreateTask addTask={addTask} />
       <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
         <Column tasks={tasks} />
       </DndContext>
