@@ -21,7 +21,7 @@ const CreateTask = ({ addTask }) => { // Receive addTask as a prop
         Create Task
       </button>
       {isOpen && (
-        <div className="bg-neutral-400 z-50 absolute top-[40%] left-1/2 w-1/3 sm:w-4/5 lg:w-1/3
+        <div className="bg-neutral-400 opacity-90 z-50 absolute top-[40%] left-1/2 w-1/3 sm:w-4/5 lg:w-1/3
         transform -translate-x-1/2 -translate-y-1/2 p-10 rounded-md">
             <h6 className="text-xl">Task Content</h6>
             <input

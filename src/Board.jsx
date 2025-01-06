@@ -40,9 +40,21 @@ const Board = () => {
       <h1 className="text-4xl sm:text-5xl lg:text-6xl mt-10">Task Board</h1>
       {/* Pass addTask as a prop to CreateTask */}
       <CreateTask addTask={addTask} />
-      <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-        <Column tasks={tasks} />
-      </DndContext>
+
+        <div className="flex justify-center items-center w-full gap-8 mt-10">
+          <DndContext
+            onDragEnd={handleDragEnd}collisionDetection={closestCorners}className="flex-1 max-w-sm">
+            <Column tasks={tasks} />
+          </DndContext>
+
+          <DndContext
+            onDragEnd={handleDragEnd}
+            collisionDetection={closestCorners}
+            className="flex-1 max-w-sm">
+            <Column tasks={tasks} />
+          </DndContext>
+        </div>
+
     </div>
   );
 };
