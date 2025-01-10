@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import TaskCard from "./components/taskCard"
-import { tasks as initialTasks, Status, statuses, Task } from "./components/utils/dataTasks"
-import { useState } from "react"
+import { Status, statuses, Task } from "./components/utils/dataTasks"
+import AddTask from "./components/addTask"
 
 const App = () => {
-  const [tasks, setTasks] = React.useState<Task[]>(initialTasks)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [currentlyHovering, setCurrentlyHovering] = useState<Status | null>(null)
 
   const columns = statuses.map((status) => {
     const tasksInColumn = tasks.filter((task) => task.status === status)
@@ -14,11 +15,47 @@ const App = () => {
     }
   })
 
+  useEffect(() => {
+    fetch("http://localhost:3000/tasks")
+      .then((response) => response.json())
+      .then((data) => {
+        setTasks(data)
+      })
+  }, [])
+
   const updateTask = (task: Task) => {
+    fetch(`http://localhost:3000/tasks/${task.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(task)
+    })
     const updatedTasks = tasks.map((t) => {
       return t.id === task.id ? task : t
     })
     setTasks(updatedTasks)
+  }
+
+  const addTask = (status: Status) => {
+    const newTask: Task = {
+      title: "New Task",
+      id: `Bus-${tasks.length + 1}`,
+      status: status,
+      priority: "low",
+      points: 0
+    }
+    fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newTask)
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setTasks([...tasks, data])
+    })
   }
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, status: Status) => {
@@ -27,21 +64,19 @@ const App = () => {
     const id = e.dataTransfer.getData("id")
     const task = tasks.find((task) => task.id === id)
     if (task) {
-      updateTask({...task, status})
+      updateTask({ ...task, status })
     }
   }
-
-  const [currentlyHovering, setCurrentlyHovering] = useState<Status | null>(null)
 
   const handleDragEnter = (status: Status) => {
     setCurrentlyHovering(status)
   }
+
   return (
     <>
       <div className="flex divide-x">
         {columns.map((column) => (
-          
-          <div className="flex-grow" 
+          <div key={column.status} className="flex-grow"
             onDrop={(e) => handleDrop(e, column.status)}
             onDragOver={(e) => e.preventDefault()}
             onDragEnter={() => handleDragEnter(column.status)}
@@ -54,11 +89,11 @@ const App = () => {
             </div>
 
             <div className={`h-full ${currentlyHovering === column.status ? "bg-neutral-300" : ""}`}>
-            
-            {column.tasks.map((task) => 
-            <TaskCard task={task} updateTask={updateTask} /> 
-            )}
+              {column.tasks.map((task) =>
+                <TaskCard key={task.id} task={task} updateTask={updateTask} />
+              )}
             </div>
+            <AddTask addTask={() => addTask(column.status)} />
           </div>
         ))}
       </div>
