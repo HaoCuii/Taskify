@@ -1,19 +1,33 @@
 import { useState } from "react"
 import React from "react"
-import { Priority, tags } from "./utils/dataTasks"
+import { priorities, tags } from "./utils/dataTasks"
 
-const AddTask = ({ addTask }: { addTask: (title: string, priority: Priority, description: string) => void }) => {
+const AddTask = ({ addTask }: { addTask: (title: string, priority: number, description: string, image: string | null) => void }) => {
   const [isClicked, setIsClicked] = useState(false)
   const [title, setTitle] = useState("")
-  const [priority, setPriority] = useState(tags[0])
+  const [priority, setPriority] = useState(0)
   const [description, setDescription] = useState("")
+  const [image, setImage] = useState<string | null>(null)
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImage(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setImage(null)
+    }
+  }
 
   const handleSubmit = () => {
-    const priorityValue = priority.slice(1) as Priority
-    addTask(title, priorityValue, description)
+    addTask(title, priority, description, image)
     setTitle("")
-    setPriority(tags[0])
+    setPriority(0)
     setDescription("")
+    setImage(null)
     setIsClicked(false)
   }
 
@@ -36,11 +50,11 @@ const AddTask = ({ addTask }: { addTask: (title: string, priority: Priority, des
               />
               <select
                 value={priority}
-                onChange={(e) => setPriority(e.target.value)}
+                onChange={(e) => setPriority(parseInt(e.target.value))}
                 className="w-full p-2 border rounded-lg mb-2"
               >
-                {tags.map((tag) => (
-                  <option key={tag} value={tag}>{tag}</option>
+                {tags.map((tags, index) => (
+                  <option key={index} value={index}>{tags}</option>
                 ))}
               </select>
               <input
@@ -50,6 +64,12 @@ const AddTask = ({ addTask }: { addTask: (title: string, priority: Priority, des
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full p-2 border rounded-lg mb-2"
               />
+              <label className="w-full p-2 border rounded-lg mb-2 flex items-center cursor-pointer">
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                />
+              </label>
             </div>
             <div className="flex justify-between mt-4">
               <button onClick={handleSubmit} className="bg-green-500 text-white p-2 rounded">Add Task</button>

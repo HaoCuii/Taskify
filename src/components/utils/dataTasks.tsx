@@ -5,6 +5,7 @@ export type Task = {
   status: Status
   priority: Priority
   points: number
+  image?: string|null
 }
 
 export type Status = "todo" | "in-progress" | "done"

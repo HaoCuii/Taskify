@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import TaskCard from "./components/taskCard"
-import { Priority, Status, statuses, Task } from "./components/utils/dataTasks"
+import { priorities, Priority, Status, statuses, Task } from "./components/utils/dataTasks"
 import AddTask from "./components/addTask"
 
 const App = () => {
@@ -37,14 +37,15 @@ const App = () => {
     setTasks(updatedTasks)
   }
 
-  const addTask = (status: Status, title: string, priority: Priority, description: string) => {
+  const addTask = (status: Status, title: string, priorityIndex: number, description: string, image: string | null) => {
     const newTask: Task = {
       title: title,
       description: description,
-      id: `Bus-${tasks.length + 1}`,
+      id: `Task-${tasks.length + 1}`,
       status: status,
-      priority: priority,
-      points: 0
+      priority: priorities[priorityIndex],
+      points: 0,
+      image: image
     }
     fetch("http://localhost:3000/tasks", {
       method: "POST",
@@ -94,7 +95,7 @@ const App = () => {
                 <TaskCard key={task.id} task={task} updateTask={updateTask} />
               )}
             </div>
-            <AddTask addTask={(title, priority, description) => addTask(column.status, title, priority, description)} />
+            <AddTask addTask={(title, priorityIndex, description, image) => addTask(column.status, title, priorityIndex, description, image)} />
           </div>
         ))}
       </div>

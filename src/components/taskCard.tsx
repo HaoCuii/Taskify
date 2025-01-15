@@ -15,8 +15,11 @@ const TaskCard = ({ task, updateTask }: { task: Task; updateTask: (task: Task) =
       onDragEnd={(e) => {
         e.currentTarget.style.opacity = "1";
       }}
-      className="border rounded-lg px-2 m-2 bg-neutral-100 shadow-md w-72"
+      className="border rounded-lg px-2 m-2 bg-neutral-100 shadow-md w-56"
     >
+      <div>
+        {task.image && <img src={task.image} alt={task.title} className="w-full h-32 object-cover" />}
+      </div>
       <div className="text-base py-2 font-semibold">
         {isEditingTitle ? (
           <input
@@ -39,9 +42,9 @@ const TaskCard = ({ task, updateTask }: { task: Task; updateTask: (task: Task) =
       <div className="flex justify-between py-2 text-sm">
         <div className="flex gap-2">
           <div>{task.id}</div>
-          {task.priority === "high" && <div>🔴</div>}
-          {task.priority === "medium" && <div>🟡</div>}
-          {task.priority === "low" && <div>🟢</div>}
+          {task.priority === "high" && <div className="px-2 border rounded-md bg-red-300 shadow-sm">🔴high</div>}
+          {task.priority === "medium" && <div className="px-2 border rounded-md bg-yellow-200 shadow-sm">🟡medium</div>}
+          {task.priority === "low" && <div className="px-2 border rounded-md bg-green-300 shadow-sm">🟢low</div>}
         </div>
 
         <div className="flex items-center gap-2">

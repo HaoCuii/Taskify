@@ -2,18 +2,28 @@
   "tasks": [
     {
       "title": "I am Task 1",
-      "id": "Bus-1",
+      "id": "Task-1",
       "status": "todo",
       "points": 10,
       "priority": "low"
     },
     {
-      "id": "Bus-2",
+      "id": "Task-2",
       "title": "Test Card",
       "description": "This is a test card purely here just to test if the features are working. I want to make it a certain length to see what hte paragraph would loook like.",
       "status": "todo",
-      "priority": "\udfe1medium",
-      "points": 0
+      "priority": "medium",
+      "points": 0,
+      "image": null
+    },
+    {
+      "id": "Task-3",
+      "title": "Test Card",
+      "description": "This is a test card purely here just to test if the features are working. I want to make it a certain length to see what the paragrah would look like",
+      "status": "in-progress",
+      "priority": "high",
+      "points": 0,
+      "image": null
     }
   ]
 }
