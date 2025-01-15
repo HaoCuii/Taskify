@@ -4,56 +4,15 @@
       "title": "I am Task 1",
       "id": "Bus-1",
       "status": "todo",
-      "points": 8,
+      "points": 10,
       "priority": "low"
     },
     {
-      "title": "I am Task 2",
       "id": "Bus-2",
-      "status": "in-progress",
-      "points": 8,
-      "priority": "low"
-    },
-    {
-      "title": "I am Task 3",
-      "id": "Bus-3",
-      "status": "done",
-      "points": 5,
-      "priority": "low"
-    },
-    {
-      "title": "I am Task 4",
-      "id": "Bus-4",
-      "status": "done",
-      "points": 5,
-      "priority": "medium"
-    },
-    {
-      "title": "I am Task 5",
-      "id": "Bus-5",
+      "title": "Test Card",
+      "description": "This is a test card purely here just to test if the features are working. I want to make it a certain length to see what hte paragraph would loook like.",
       "status": "todo",
-      "points": 5,
-      "priority": "medium"
-    },
-    {
-      "title": "I am Task 6",
-      "id": "Bus-6",
-      "status": "in-progress",
-      "points": 5,
-      "priority": "medium"
-    },
-    {
-      "title": "I am Task 7",
-      "id": "Bus-7",
-      "status": "todo",
-      "points": 0,
-      "priority": "high"
-    },
-    {
-      "id": "Bus-8",
-      "title": "New Task",
-      "status": "in-progress",
-      "priority": "low",
+      "priority": "\udfe1medium",
       "points": 0
     }
   ]

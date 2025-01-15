@@ -15,9 +15,9 @@ const TaskCard = ({ task, updateTask }: { task: Task; updateTask: (task: Task) =
       onDragEnd={(e) => {
         e.currentTarget.style.opacity = "1";
       }}
-      className="border rounded-lg px-2 m-2 bg-neutral-100 shadow-md w-52"
+      className="border rounded-lg px-2 m-2 bg-neutral-100 shadow-md w-72"
     >
-      <div className="text-base py-2">
+      <div className="text-base py-2 font-semibold">
         {isEditingTitle ? (
           <input
             type="text"
@@ -33,7 +33,9 @@ const TaskCard = ({ task, updateTask }: { task: Task; updateTask: (task: Task) =
           </div>
         )}
       </div>
-
+      <div>
+        {task.description && <div className="text-sm">{task.description}</div>}
+      </div>
       <div className="flex justify-between py-2 text-sm">
         <div className="flex gap-2">
           <div>{task.id}</div>

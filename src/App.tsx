@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import TaskCard from "./components/taskCard"
-import { Status, statuses, Task } from "./components/utils/dataTasks"
+import { Priority, Status, statuses, Task } from "./components/utils/dataTasks"
 import AddTask from "./components/addTask"
 
 const App = () => {
@@ -37,12 +37,13 @@ const App = () => {
     setTasks(updatedTasks)
   }
 
-  const addTask = (status: Status) => {
+  const addTask = (status: Status, title: string, priority: Priority, description: string) => {
     const newTask: Task = {
-      title: "New Task",
+      title: title,
+      description: description,
       id: `Bus-${tasks.length + 1}`,
       status: status,
-      priority: "low",
+      priority: priority,
       points: 0
     }
     fetch("http://localhost:3000/tasks", {
@@ -93,7 +94,7 @@ const App = () => {
                 <TaskCard key={task.id} task={task} updateTask={updateTask} />
               )}
             </div>
-            <AddTask addTask={() => addTask(column.status)} />
+            <AddTask addTask={(title, priority, description) => addTask(column.status, title, priority, description)} />
           </div>
         ))}
       </div>
