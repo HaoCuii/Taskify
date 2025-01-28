@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from "react"
+import { useParams, useNavigate } from "react-router-dom"
 import TaskCard from "../components/taskCard"
 import { priorities, Priority, Status, statuses, Task } from "../components/utils/dataTasks"
 import AddTask from "../components/addTask"
-import { Columns} from "lucide-react"
+import { Columns } from "lucide-react"
 
 const App = () => {
+  const { roomId } = useParams<{ roomId: string }>()
+  const navigate = useNavigate()
   const [tasks, setTasks] = useState<Task[]>([])
   const [currentlyHovering, setCurrentlyHovering] = useState<Status | null>(null)
 
-  const columns = statuses.map((status) => {
-    const tasksInColumn = tasks.filter((task) => task.status === status)
-    return {
-      status: status,
-      tasks: tasksInColumn
-    }
-  })
-
   useEffect(() => {
-    fetch("http://localhost:3000/tasks")
-      .then((response) => response.json())
+    fetch(`http://localhost:1337/rooms/${roomId}/tasks`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Room not found')
+        }
+        return response.json()
+      })
       .then((data) => {
         setTasks(data)
       })
-  }, [])
+      .catch((error) => {
+        console.error(error)
+        navigate('/join')
+      })
+  }, [roomId, navigate])
 
   const updateTask = (task: Task) => {
-    fetch(`http://localhost:3000/tasks/${task.id}`, {
+    fetch(`http://localhost:1337/rooms/${roomId}/tasks/${task.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -48,7 +52,7 @@ const App = () => {
       points: 0,
       image: image
     }
-    fetch("http://localhost:3000/tasks", {
+    fetch(`http://localhost:1337/rooms/${roomId}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -74,6 +78,14 @@ const App = () => {
   const handleDragEnter = (status: Status) => {
     setCurrentlyHovering(status)
   }
+
+  const columns = statuses.map((status) => {
+    const tasksInColumn = tasks.filter((task) => task.status === status)
+    return {
+      status: status,
+      tasks: tasksInColumn
+    }
+  })
 
   return (
     <div className="bg-neutral-100 min-h-screen p-8">
