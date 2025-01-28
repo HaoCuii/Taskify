@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { io } from "socket.io-client"
 import TaskCard from "../components/taskCard"
 import { priorities, Priority, Status, statuses, Task } from "../components/utils/dataTasks"
 import AddTask from "../components/addTask"
 import { Columns } from "lucide-react"
+
+const socket = io("http://localhost:1337")
 
 const App = () => {
   const { roomId } = useParams<{ roomId: string }>()
@@ -20,12 +23,31 @@ const App = () => {
         return response.json()
       })
       .then((data) => {
-        setTasks(data)
+        setTasks(Array.isArray(data) ? data : [])
       })
       .catch((error) => {
         console.error(error)
         navigate('/join')
       })
+
+    socket.emit("join room", roomId, (roomTasks: Task[]) => {
+      setTasks(Array.isArray(roomTasks) ? roomTasks : [])
+    })
+
+    socket.on("new task", (task: Task) => {
+      setTasks((prevTasks) => [...prevTasks, task])
+    })
+
+    socket.on("updated task", (updatedTask: Task) => {
+      setTasks((prevTasks) => prevTasks.map(task => 
+        task.id === updatedTask.id ? updatedTask : task
+      ))
+    })
+
+    return () => {
+      socket.off("new task")
+      socket.off("updated task")
+    }
   }, [roomId, navigate])
 
   const updateTask = (task: Task) => {

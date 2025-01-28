@@ -5,7 +5,12 @@ import cors from 'cors';
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
 
 app.use(express.json());
 
@@ -13,29 +18,29 @@ let users = [];
 const roomData = {};
 
 const corsOptions = {
-    origin: '*', 
-    credentials: true,
-    optionSuccessStatus: 200,
- };
- 
- app.use(cors(corsOptions));
- app.use(express.json());  // For parsing JSON request bodies
+  origin: '*', 
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());  // For parsing JSON request bodies
 
 function generateRoomId() {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let roomId = '';
-    for (let i = 0; i < 6; i++) {
-        roomId += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return roomId;
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let roomId = '';
+  for (let i = 0; i < 6; i++) {
+    roomId += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return roomId;
 }
 
 app.post('/create', (req, res) => {
-    const roomId = generateRoomId();
-    roomData[roomId] = {
+  const roomId = generateRoomId();
+  roomData[roomId] = {
     tasks: [],  // Initialize tasks as an empty array for this room
   };
-    res.json({ roomId });
+  res.json({ roomId });
 });
 
 io.on('connection', (socket) => {
@@ -89,6 +94,7 @@ app.post('/rooms/:roomId/tasks', (req, res) => {
     roomData[roomId] = { tasks: [] };
   }
   roomData[roomId].tasks.push(task);
+  io.to(roomId).emit("new task", task);
   res.status(201).json(task);
 });
 
@@ -99,18 +105,11 @@ app.put('/rooms/:roomId/tasks/:taskId', (req, res) => {
     roomData[roomId].tasks = roomData[roomId].tasks.map(task => 
       task.id === taskId ? updatedTask : task
     );
+    io.to(roomId).emit("updated task", updatedTask);
     res.json(updatedTask);
   } else {
     res.status(404).json({ message: "Room not found" });
   }
-});
-
-app.post('/rooms', (req, res) => {
-  const { roomId, roomName } = req.body;
-  if (!roomData[roomId]) {
-    roomData[roomId] = { tasks: [] };
-  }
-  res.status(201).json({ roomId, roomName });
 });
 
 server.listen(1337, () => {
