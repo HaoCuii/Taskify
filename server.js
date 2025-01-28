@@ -8,7 +8,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: '*',
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
 
@@ -76,6 +76,13 @@ io.on('connection', (socket) => {
       io.to(roomName).emit("updated task", updatedTask);
     }
   });
+
+  socket.on("delete task", (roomName, taskId) => {
+    if (roomData[roomName]) {
+      roomData[roomName].tasks = roomData[roomName].tasks.filter(task => task.id !== taskId);
+      io.to(roomName).emit("deleted task", taskId);
+    }
+  });
 });
 
 app.get('/rooms/:roomId/tasks', (req, res) => {
@@ -107,6 +114,17 @@ app.put('/rooms/:roomId/tasks/:taskId', (req, res) => {
     );
     io.to(roomId).emit("updated task", updatedTask);
     res.json(updatedTask);
+  } else {
+    res.status(404).json({ message: "Room not found" });
+  }
+});
+
+app.delete('/rooms/:roomId/tasks/:taskId', (req, res) => {
+  const { roomId, taskId } = req.params;
+  if (roomData[roomId]) {
+    roomData[roomId].tasks = roomData[roomId].tasks.filter(task => task.id !== taskId);
+    io.to(roomId).emit("deleted task", taskId);
+    res.status(204).end();
   } else {
     res.status(404).json({ message: "Room not found" });
   }

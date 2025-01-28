@@ -44,9 +44,14 @@ const App = () => {
       ))
     })
 
+    socket.on("deleted task", (taskId: string) => {
+      setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId))
+    })
+
     return () => {
       socket.off("new task")
       socket.off("updated task")
+      socket.off("deleted task")
     }
   }, [roomId, navigate])
 
@@ -84,6 +89,18 @@ const App = () => {
     .then((response) => response.json())
     .then((data) => {
       setTasks([...tasks, data])
+    })
+  }
+
+  const deleteTask = (taskId: string) => {
+    fetch(`http://localhost:1337/rooms/${roomId}/tasks/${taskId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(() => {
+      setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId))
     })
   }
 
@@ -139,7 +156,7 @@ const App = () => {
                 }`}
               >
                 {column.tasks.map((task) => (
-                  <TaskCard key={task.id} task={task} updateTask={updateTask}  />
+                  <TaskCard key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} />
                 ))}
               </div>
               
