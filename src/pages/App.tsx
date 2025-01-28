@@ -4,7 +4,7 @@ import { io } from "socket.io-client"
 import TaskCard from "../components/taskCard"
 import { priorities, Priority, Status, statuses, Task } from "../components/utils/dataTasks"
 import AddTask from "../components/addTask"
-import { Columns } from "lucide-react"
+import { Columns, Layout} from "lucide-react"
 
 const socket = io("http://localhost:1337")
 
@@ -126,47 +126,94 @@ const App = () => {
     }
   })
 
+  // Helper function to get column header color
+  const getColumnHeaderColor = (status: Status) => {
+    switch (status) {
+      case "todo": return "bg-blue-50 border-blue-200"
+      case "in-progress": return "bg-yellow-50 border-yellow-200"
+      case "done": return "bg-green-50 border-green-200"
+      default: return "bg-gray-50 border-gray-200"
+    }
+  }
+
+  // Helper function to get column badge color
+  const getColumnBadgeColor = (status: Status) => {
+    switch (status) {
+      case "todo": return "bg-blue-100 text-blue-700"
+      case "in-progress": return "bg-yellow-100 text-yellow-700"
+      case "done": return "bg-green-100 text-green-700"
+      default: return "bg-gray-100 text-gray-700"
+    }
+  }
+
   return (
-    <div className="bg-neutral-100 min-h-screen p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
-          <Columns size={32} className="text-neutral-600" />
-          <h1 className="text-4xl font-bold text-neutral-800">Task Management Board</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="p-6">
+        {/* Header Section */}
+        <div className="max-w-7xl mx-auto mb-8">
+          <div className="flex items-center gap-4 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+            <div className="p-3 bg-indigo-50 rounded-lg">
+              <Layout className="w-6 h-6 text-indigo-600" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Task Management Board</h1>
+              <p className="text-sm text-gray-500">Room ID: {roomId}</p>
+            </div>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-4 gap-6">
-          {columns.map((column) => (
-            <div 
-              key={column.status} 
-              className="bg-white rounded-xl shadow-md p-4 transition-all duration-300"
-              onDrop={(e) => handleDrop(e, column.status)}
-              onDragOver={(e) => e.preventDefault()}
-              onDragEnter={() => handleDragEnter(column.status)}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl capitalize font-semibold text-neutral-700">{column.status}</h2>
-                <div className="bg-neutral-200 text-neutral-600 px-2 py-1 rounded-full text-sm font-medium">
-                  {column.tasks.reduce((total, task) => total + (task?.points || 0), 0)} pts
+
+        {/* Columns Grid */}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {columns.map((column) => (
+              <div 
+                key={column.status}
+                className="flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 transition-all duration-300"
+                onDrop={(e) => handleDrop(e, column.status)}
+                onDragOver={(e) => e.preventDefault()}
+                onDragEnter={() => handleDragEnter(column.status)}
+              >
+                {/* Column Header */}
+                <div className={`p-4 rounded-t-xl border-b ${getColumnHeaderColor(column.status)}`}>
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-semibold text-gray-900 capitalize">
+                      {column.status.replace("-", " ")}
+                    </h2>
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium ${getColumnBadgeColor(column.status)}`}>
+                      {column.tasks.reduce((total, task) => total + (task?.points || 0), 0)} pts
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tasks Container */}
+                <div 
+                  className={`flex-1 p-4 space-y-4 min-h-[500px] transition-colors duration-300 ${
+                    currentlyHovering === column.status 
+                      ? "bg-gray-50" 
+                      : ""
+                  }`}
+                >
+                  {column.tasks.map((task) => (
+                    <TaskCard 
+                      key={task.id} 
+                      task={task} 
+                      updateTask={updateTask} 
+                      deleteTask={deleteTask}
+                    />
+                  ))}
+                </div>
+
+                {/* Add Task Section */}
+                <div className="p-4 border-t border-gray-200">
+                  <AddTask 
+                    addTask={(title, priorityIndex, description, image) => 
+                      addTask(column.status, title, priorityIndex, description, image)
+                    } 
+                  />
                 </div>
               </div>
-
-              <div 
-                className={`space-y-4 min-h-[400px] transition-colors duration-300 ${
-                  currentlyHovering === column.status ? "bg-neutral-100" : ""
-                }`}
-              >
-                {column.tasks.map((task) => (
-                  <TaskCard key={task.id} task={task} updateTask={updateTask} deleteTask={deleteTask} />
-                ))}
-              </div>
-              
-              <AddTask 
-                addTask={(title, priorityIndex, description, image) => 
-                  addTask(column.status, title, priorityIndex, description, image)
-                } 
-              />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

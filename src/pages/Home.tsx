@@ -51,8 +51,8 @@ const Home = () => {
         </div>
         
         <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-          Manage Tasks with
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"> Efficiency</span>
+          Collaborate With{' '}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"> WorkFlow</span>
         </h1>
         
         <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
