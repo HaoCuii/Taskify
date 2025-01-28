@@ -3,7 +3,7 @@
     {
       "title": "I am Task 1",
       "id": "Task-1",
-      "status": "todo",
+      "status": "in-progress",
       "points": 10,
       "priority": "low"
     },
@@ -20,7 +20,7 @@
       "id": "Task-3",
       "title": "Test Card",
       "description": "This is a test card purely here just to test if the features are working. I want to make it a certain length to see what the paragrah would look like",
-      "status": "in-progress",
+      "status": "todo",
       "priority": "high",
       "points": 0,
       "image": null
