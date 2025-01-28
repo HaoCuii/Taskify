@@ -1,42 +1,40 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Layout } from 'lucide-react'
 
+const ActionButton = ({ to, primary, children }) => (
+  <Link 
+    to={to}
+    className={`
+      flex items-center gap-2 px-4 py-4 rounded-xl font-medium shadow-sm
+      transition-all duration-300 transform hover:-translate-y-0.5
+      ${primary 
+        ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-200 hover:shadow-lg" 
+        : "bg-white text-gray-800 hover:bg-gray-50 hover:shadow-lg"
+      }
+    `}
+  >
+    {children}
+  </Link>
+);
 const NavBar = () => {
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <a href="/home">
-            <div className="text-white text-xl font-bold">Taskify</div>
-        </a>
-        <div className="space-x-4">
-          <Link 
-            to="/home" 
-            className="text-white hover:bg-gray-700 px-3 py-2 rounded-md"
-          >
-            Home
-          </Link>
-          <Link 
-            to="/join" 
-            className="text-white hover:bg-gray-700 px-3 py-2 rounded-md"
-          >
-            Join Room
-          </Link>
-          <Link 
-            to="/create" 
-            className="text-white hover:bg-gray-700 px-3 py-2 rounded-md"
-          >
-            Create Room
-          </Link>
+    <nav className="container mx-auto px-6 py-2 ">
+        <div className="flex items-center justify-between ">
+          <div className="flex items-center gap-2">
+            <Layout className="text-blue-600" size={24} />
+            <a href="/home">
+            <span className="text-xl font-bold text-gray-900">Taskify</span>
+            </a>
+          </div>
+          <div className="flex gap-2">
+            <ActionButton to="/join" primary={false}>Join Room</ActionButton>
+            <ActionButton to="/create" primary={false}>Create Room</ActionButton>
 
-          <Link 
-            to="/room" 
-            className="text-white hover:bg-gray-700 px-3 py-2 rounded-md"
-          >
-            Room
-          </Link>
+          </div>
+
         </div>
-      </div>
-    </nav>
+      </nav>
   )
 }
 

@@ -38,7 +38,32 @@ function generateRoomId() {
 app.post('/create', (req, res) => {
   const roomId = generateRoomId();
   roomData[roomId] = {
-    tasks: [],  // Initialize tasks as an empty array for this room
+    "tasks": [
+    {
+      "title": "I am Task 1",
+      "id": "Task-1",
+      "status": "in-progress",
+      "points": 10,
+      "priority": "low"
+    },
+    {
+      "id": "Task-2",
+      "title": "Test Card",
+      "description": "This is a test card purely here just to test if the features are working. I want to make it a certain length to see what hte paragraph would loook like.",
+      "status": "todo",
+      "priority": "medium",
+      "points": 0,
+      "image": null
+    },
+    {
+      "id": "Task-3",
+      "title": "Test Card",
+      "description": "This is a test card purely here just to test if the features are working. I want to make it a certain length to see what the paragrah would look like",
+      "status": "todo",
+      "priority": "high",
+      "points": 0,
+      "image": null
+    }]
   };
   res.json({ roomId });
 });
