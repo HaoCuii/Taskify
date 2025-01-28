@@ -23,7 +23,7 @@ const NavBar = () => {
     <nav className="container mx-auto px-6 py-2 ">
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-2">
-          <img src='/assets/WorkFlow.png' alt="WorkFlow" className='h-8 w-auto' />
+          <img src='/src/assets/WorkFlow.png' alt="WorkFlow" className='h-8 w-auto' />
           <a href="/home">
             <span className="text-xl font-bold text-gray-900">WorkFlow</span>
           </a>
