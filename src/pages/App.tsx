@@ -6,7 +6,7 @@ import { priorities, Priority, Status, statuses, Task } from "../components/util
 import AddTask from "../components/AddTask"
 import { Columns, Layout} from "lucide-react"
 
-const socket = io()
+const socket = io('https://workflow-tasks.vercel.app/')
 
 const App = () => {
   const { roomId } = useParams<{ roomId: string }>()
