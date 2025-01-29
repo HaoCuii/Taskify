@@ -6,7 +6,7 @@ import { priorities, Priority, Status, statuses, Task } from "../components/util
 import AddTask from "../components/AddTask"
 import { Columns, Layout } from "lucide-react"
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:1337"
+const API_URL = process.env.REACT_APP_API_URL
 const socket = io(API_URL)
 
 const App = () => {
