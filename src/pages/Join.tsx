@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Users } from 'lucide-react'
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:1337"
+
 const Join = () => {
   const [roomId, setRoomId] = useState('')
   const navigate = useNavigate()

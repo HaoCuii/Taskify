@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Loader2, ArrowLeft } from 'lucide-react'
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:1337"
+
 const Create = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
@@ -9,9 +11,10 @@ const Create = () => {
 
   const handleCreateRoom = async () => {
     try {
+      console.log({API_URL})
       setIsLoading(true)
       setError('')
-      const response = await fetch('http://localhost:1337/create/', {
+      const response = await fetch(`${API_URL}/create`, {
         method: 'POST',
       })
       if (!response.ok) throw new Error('Failed to create room')
