@@ -6,7 +6,7 @@ import { priorities, Priority, Status, statuses, Task } from "../components/util
 import AddTask from "../components/AddTask"
 import { Columns, Layout } from "lucide-react"
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:1337/"
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:1337"
 const socket = io(API_URL)
 
 const App = () => {
@@ -127,7 +127,6 @@ const App = () => {
     }
   })
 
-  // Helper function to get column header color
   const getColumnHeaderColor = (status: Status) => {
     switch (status) {
       case "todo": return "bg-blue-50 border-blue-200"
@@ -137,7 +136,6 @@ const App = () => {
     }
   }
 
-  // Helper function to get column badge color
   const getColumnBadgeColor = (status: Status) => {
     switch (status) {
       case "todo": return "bg-blue-100 text-blue-700"
@@ -164,7 +162,7 @@ const App = () => {
         </div>
 
         {/* Columns Grid */}
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {columns.map((column) => (
               <div 
@@ -217,7 +215,6 @@ const App = () => {
           </div>
         </div>
       </div>
-    </div>
   )
 }
 
