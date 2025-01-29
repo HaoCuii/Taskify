@@ -4,9 +4,10 @@ import { io } from "socket.io-client"
 import TaskCard from "../components/taskCard"
 import { priorities, Priority, Status, statuses, Task } from "../components/utils/dataTasks"
 import AddTask from "../components/AddTask"
-import { Columns, Layout} from "lucide-react"
+import { Columns, Layout } from "lucide-react"
 
-const socket = io("http://localhost:1337/")
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:1337/"
+const socket = io(API_URL)
 
 const App = () => {
   const { roomId } = useParams<{ roomId: string }>()
@@ -15,7 +16,7 @@ const App = () => {
   const [currentlyHovering, setCurrentlyHovering] = useState<Status | null>(null)
 
   useEffect(() => {
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks`)
+    fetch(`${API_URL}/rooms/${roomId}/tasks`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Room not found')
@@ -56,17 +57,17 @@ const App = () => {
   }, [roomId, navigate])
 
   const updateTask = (task: Task) => {
-    fetch(`http://localhost:1337p/rooms/${roomId}/tasks/${task.id}`, {
+    fetch(`${API_URL}/rooms/${roomId}/tasks/${task.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(task)
     })
-    const updatedTasks = tasks.map((t) => {
-      return t.id === task.id ? task : t
+    .then((response) => response.json())
+    .then((updatedTask) => {
+      setTasks((prevTasks) => prevTasks.map(t => t.id === updatedTask.id ? updatedTask : t))
     })
-    setTasks(updatedTasks)
   }
 
   const addTask = (status: Status, title: string, priorityIndex: number, description: string, image: string | null) => {
@@ -79,7 +80,7 @@ const App = () => {
       points: 0,
       image: image
     }
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks`, {
+    fetch(`${API_URL}/rooms/${roomId}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -93,7 +94,7 @@ const App = () => {
   }
 
   const deleteTask = (taskId: string) => {
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks/${taskId}`, {
+    fetch(`${API_URL}/rooms/${roomId}/tasks/${taskId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
