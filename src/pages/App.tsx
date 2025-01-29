@@ -15,7 +15,7 @@ const App = () => {
   const [currentlyHovering, setCurrentlyHovering] = useState<Status | null>(null)
 
   useEffect(() => {
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks`)
+    fetch(`https://workflow-tasks.vercel.app/rooms/${roomId}/tasks`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Room not found')
@@ -56,7 +56,7 @@ const App = () => {
   }, [roomId, navigate])
 
   const updateTask = (task: Task) => {
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks/${task.id}`, {
+    fetch(`https://workflow-tasks.vercel.app/rooms/${roomId}/tasks/${task.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -79,7 +79,7 @@ const App = () => {
       points: 0,
       image: image
     }
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks`, {
+    fetch(`https://workflow-tasks.vercel.app/rooms/${roomId}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -93,7 +93,7 @@ const App = () => {
   }
 
   const deleteTask = (taskId: string) => {
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks/${taskId}`, {
+    fetch(`https://workflow-tasks.vercel.app/rooms/${roomId}/tasks/${taskId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
