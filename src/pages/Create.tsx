@@ -11,7 +11,7 @@ const Create = () => {
     try {
       setIsLoading(true)
       setError('')
-      const response = await fetch('http://localhost:1337/create', {
+      const response = await fetch('https://workflow-tasks.vercel.app/create', {
         method: 'POST',
       })
       if (!response.ok) throw new Error('Failed to create room')
