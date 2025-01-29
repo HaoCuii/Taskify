@@ -3,10 +3,10 @@ import { useParams, useNavigate } from "react-router-dom"
 import { io } from "socket.io-client"
 import TaskCard from "../components/taskCard"
 import { priorities, Priority, Status, statuses, Task } from "../components/utils/dataTasks"
-import AddTask from "../components/addTask"
+import AddTask from "../components/AddTask"
 import { Columns, Layout} from "lucide-react"
 
-const socket = io("http://localhost:1337")
+const socket = io("http://localhost:1337/")
 
 const App = () => {
   const { roomId } = useParams<{ roomId: string }>()
