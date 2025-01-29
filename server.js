@@ -5,26 +5,26 @@ import cors from 'cors';
 
 const app = express();
 const server = createServer(app);
+
+
+const corsOptions = {
+  origin: '*',
+  credentials: true, 
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions)); 
+app.use(express.json({ limit: '128kb' }));  
+
 const io = new Server(server, {
   cors: {
-    origin: 'https://workflow-tasks.vercel.app/',
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
 
-app.use(express.json());
-
 let users = [];
 const roomData = {};
-
-const corsOptions = {
-  origin: 'https://workflow-tasks.vercel.app/', 
-  credentials: true,
-  optionSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
-app.use(express.json());  // For parsing JSON request bodies
 
 function generateRoomId() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -35,22 +35,21 @@ function generateRoomId() {
   return roomId;
 }
 
+
 app.post('/create', (req, res) => {
   const roomId = generateRoomId();
   roomData[roomId] = {
-        "tasks": [],
-        "users": []
-      }
-      
+    tasks: [],
+    users: []
+  };
+
   res.json({ roomId });
 });
 
+// Socket.io events for room interactions
 io.on('connection', (socket) => {
   socket.on("join server", (username) => {
-    const user = {
-      username,
-      id: socket.id
-    };
+    const user = { username, id: socket.id };
     users.push(user);
     io.emit("new user", user);
   });
@@ -97,6 +96,7 @@ io.on('connection', (socket) => {
   });
 });
 
+// Get tasks for a room
 app.get('/rooms/:roomId/tasks', (req, res) => {
   const { roomId } = req.params;
   if (roomData[roomId]) {
@@ -106,6 +106,7 @@ app.get('/rooms/:roomId/tasks', (req, res) => {
   }
 });
 
+// Post tasks to a room
 app.post('/rooms/:roomId/tasks', (req, res) => {
   const { roomId } = req.params;
   const task = req.body;
@@ -117,6 +118,7 @@ app.post('/rooms/:roomId/tasks', (req, res) => {
   res.status(201).json(task);
 });
 
+// Put request to update task
 app.put('/rooms/:roomId/tasks/:taskId', (req, res) => {
   const { roomId, taskId } = req.params;
   const updatedTask = req.body;
@@ -131,6 +133,7 @@ app.put('/rooms/:roomId/tasks/:taskId', (req, res) => {
   }
 });
 
+// Delete task from a room
 app.delete('/rooms/:roomId/tasks/:taskId', (req, res) => {
   const { roomId, taskId } = req.params;
   if (roomData[roomId]) {
@@ -141,6 +144,17 @@ app.delete('/rooms/:roomId/tasks/:taskId', (req, res) => {
     res.status(404).json({ message: "Room not found" });
   }
 });
+
+app.use((err, req, res, next) => {
+  if (err.status === 413) {
+    console.error('Payload Too Large:', err);
+    res.status(413).json({ message: "Payload Too Large. Maximum allowed size is 128kb." });
+  } else {
+    next(err);
+  }
+});
+
+
 
 server.listen(1337, () => {
   console.log('Server listening on port 1337');
