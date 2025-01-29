@@ -7,7 +7,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: 'https://workflow-tasks.vercel.app/',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
@@ -18,7 +18,7 @@ let users = [];
 const roomData = {};
 
 const corsOptions = {
-  origin: '*', 
+  origin: 'https://workflow-tasks.vercel.app/', 
   credentials: true,
   optionSuccessStatus: 200,
 };
