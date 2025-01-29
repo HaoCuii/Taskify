@@ -8,7 +8,7 @@ const server = createServer(app);
 
 
 const corsOptions = {
-  origin: 'https://workflow-tasks.vercel.app/',
+  origin: 'https://workflow-tasks.vercel.app',
   credentials: false, 
   optionSuccessStatus: 200,
 };
@@ -18,7 +18,7 @@ app.use(express.json({ limit: '128kb' }));
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://workflow-tasks.vercel.app/',
+    origin: 'https://workflow-tasks.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
