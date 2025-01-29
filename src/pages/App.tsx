@@ -56,7 +56,7 @@ const App = () => {
   }, [roomId, navigate])
 
   const updateTask = (task: Task) => {
-    fetch(`http://localhost:1337/rooms/${roomId}/tasks/${task.id}`, {
+    fetch(`http://localhost:1337p/rooms/${roomId}/tasks/${task.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"

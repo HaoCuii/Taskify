@@ -26,7 +26,6 @@ const io = new Server(server, {
 let users = [];
 const roomData = {};
 
-
 function generateRoomId() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let roomId = '';
@@ -43,6 +42,7 @@ app.post('/create', (req, res) => {
     tasks: [],
     users: []
   };
+
   res.json({ roomId });
 });
 
