@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Loader2, ArrowLeft } from 'lucide-react'
 
-const API_URL = 'https://workflow-tasks.vercel.app/'
+const API_URL = 'workflow-9f7pglidf-haocuiis-projects.vercel.app'
 
 const Create = () => {
   const navigate = useNavigate()
