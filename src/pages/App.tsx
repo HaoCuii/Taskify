@@ -6,7 +6,7 @@ import { priorities, Priority, Status, statuses, Task } from "../components/util
 import AddTask from "../components/AddTask"
 import { Columns, Layout } from "lucide-react"
 
-const API_URL = 'workflow-9f7pglidf-haocuiis-projects.vercel.app'
+const API_URL = 'https://workflow-tasks.vercel.app'
 const socket = io(API_URL)
 
 const App = () => {

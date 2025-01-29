@@ -9,7 +9,7 @@ const server = createServer(app);
 
 const corsOptions = {
   origin: '*',
-  credentials: true, 
+  credentials: false, 
   optionSuccessStatus: 200,
 };
 
