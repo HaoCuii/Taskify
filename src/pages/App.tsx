@@ -4,7 +4,7 @@ import TaskCard from "../components/taskCard"
 import { priorities, Priority, Status, statuses, Task } from "../components/utils/dataTasks"
 import AddTask from "../components/AddTask"
 import { Columns, Layout } from "lucide-react"
-import { writeData, readData } from "../../firebase"
+import { writeData, readData, deleteData } from "../../firebase"
 import { onValue } from "firebase/database"
 
 const App = () => {
@@ -29,7 +29,8 @@ const App = () => {
 
   const updateTask = (task: Task) => {
     setTasks((prevTasks) => prevTasks.map(t => t.id === task.id ? task : t))
-    writeData(roomId, task.id, task.title, task.description, task.status, task.priority, task.points, task.image)
+    console.log(task)
+    writeData(roomId, task.id, task.title, task.description, task.status, task.priority, task.points, task.image || null)
   }
 
   const addTask = (status: Status, title: string, priorityIndex: number, description: string, image: string | null) => {
@@ -43,12 +44,12 @@ const App = () => {
       image: image
     }
     setTasks([...tasks, newTask])
-    writeData(roomId, newTask.id, newTask.title, newTask.description, newTask.status, newTask.priority, newTask.points, newTask.image)
+    writeData(roomId, newTask.id, newTask.title || "", newTask.description || "", newTask.status, newTask.priority, newTask.points, newTask.image || null)
   }
 
   const deleteTask = (taskId: string) => {
     setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId))
-    writeData(roomId, taskId, null, null, null, null, null, null) // Remove task from Firebase
+    deleteData(roomId, taskId)
   }
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, status: Status) => {
@@ -57,7 +58,8 @@ const App = () => {
     const id = e.dataTransfer.getData("id")
     const task = tasks.find((task) => task.id === id)
     if (task) {
-      updateTask({ ...task, status })
+      const updatedTask = { ...task, status }
+      updateTask(updatedTask)
     }
   }
 

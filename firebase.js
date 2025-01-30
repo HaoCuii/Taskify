@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set } from "firebase/database";  // Import Realtime DB methods
+import { getDatabase, ref, set, remove} from "firebase/database";  // Import Realtime DB methods
 
 const firebaseConfig = {
   apiKey: "AIzaSyCuOpIeXzzQ-tCycFojNOA3ynqiitzlKtw",
@@ -41,5 +41,18 @@ function readData(roomId) {
   return reference;
 }
 
-export { writeData , readData };
+function deleteData(roomId, id) {
+  const db = getDatabase(app);
+  const reference = ref(db, `rooms/${roomId}/${id}`); 
+  console.log(reference);
+  remove(reference)
+    .then(() => {
+      console.log("Task deleted successfully");
+    })
+    .catch((error) => {
+      console.error("Error deleting task:", error);
+    });
+}
+
+export { writeData , readData, deleteData};
 
