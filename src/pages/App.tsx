@@ -7,6 +7,15 @@ import { Columns, Layout } from "lucide-react"
 import { writeData, readData, deleteData } from "../../firebase"
 import { onValue } from "firebase/database"
 
+const generateTaskId = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (let i = 0; i < 4; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return result
+}
+
 const App = () => {
   const { roomId } = useParams<{ roomId: string }>()
   const navigate = useNavigate()
@@ -37,7 +46,7 @@ const App = () => {
     const newTask: Task = {
       title: title,
       description: description,
-      id: `Task-${tasks.length + 1}`,
+      id: generateTaskId(),
       status: status,
       priority: priorities[priorityIndex],
       points: 0,
