@@ -69,20 +69,6 @@ const Home = () => {
           </ActionButton>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mb-20">
-          {[
-            { label: "Active Users", value: "10K+" },
-            { label: "Tasks Completed", value: "1M+" },
-            { label: "Team Rooms", value: "50K+" },
-            { label: "Daily Updates", value: "100K+" },
-          ].map((stat, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-white shadow-sm">
-              <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
-            </div>
-          ))}
-        </div>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
