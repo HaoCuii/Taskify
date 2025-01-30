@@ -6,10 +6,9 @@ import cors from 'cors';
 const app = express();
 const server = createServer(app);
 
-
 const corsOptions = {
-  origin: 'https://workflow-tasks.vercel.app',
-  credentials: false, 
+  origin: '*', // Allow all origins
+  credentials: true, 
   optionSuccessStatus: 200,
 };
 
@@ -18,7 +17,7 @@ app.use(express.json({ limit: '128kb' }));
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://workflow-tasks.vercel.app',
+    origin: '*', // Allow all origins
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
@@ -34,7 +33,6 @@ function generateRoomId() {
   }
   return roomId;
 }
-
 
 app.post('/create', (req, res) => {
   const roomId = generateRoomId();
@@ -153,8 +151,6 @@ app.use((err, req, res, next) => {
     next(err);
   }
 });
-
-
 
 server.listen(1337, () => {
   console.log('Server listening on port 1337');
