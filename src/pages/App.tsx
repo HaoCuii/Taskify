@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { io } from "socket.io-client"
 import TaskCard from "../components/taskCard"
 import { priorities, Priority, Status, statuses, Task } from "../components/utils/dataTasks"
 import AddTask from "../components/AddTask"
 import { Columns, Layout } from "lucide-react"
-
-const API_URL = 'https://workflow-tasks.vercel.app'
-const socket = io(API_URL)
+import { writeData, readData } from "../../firebase"
+import { onValue } from "firebase/database"
 
 const App = () => {
   const { roomId } = useParams<{ roomId: string }>()
@@ -16,58 +14,22 @@ const App = () => {
   const [currentlyHovering, setCurrentlyHovering] = useState<Status | null>(null)
 
   useEffect(() => {
-    fetch(`${API_URL}/rooms/${roomId}/tasks`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Room not found')
-        }
-        return response.json()
-      })
-      .then((data) => {
-        setTasks(Array.isArray(data) ? data : [])
-      })
-      .catch((error) => {
-        console.error(error)
+    const roomRef = readData(roomId)
+    onValue(roomRef, (snapshot) => {
+      const data = snapshot.val()
+      if (data) {
+        const tasksArray = Object.values(data) as Task[]
+        setTasks(tasksArray)
+      } else {
+        console.error('Room not found')
         navigate('/join')
-      })
-
-    socket.emit("join room", roomId, (roomTasks: Task[]) => {
-      setTasks(Array.isArray(roomTasks) ? roomTasks : [])
+      }
     })
-
-    socket.on("new task", (task: Task) => {
-      setTasks((prevTasks) => [...prevTasks, task])
-    })
-
-    socket.on("updated task", (updatedTask: Task) => {
-      setTasks((prevTasks) => prevTasks.map(task => 
-        task.id === updatedTask.id ? updatedTask : task
-      ))
-    })
-
-    socket.on("deleted task", (taskId: string) => {
-      setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId))
-    })
-
-    return () => {
-      socket.off("new task")
-      socket.off("updated task")
-      socket.off("deleted task")
-    }
   }, [roomId, navigate])
 
   const updateTask = (task: Task) => {
-    fetch(`${API_URL}/rooms/${roomId}/tasks/${task.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(task)
-    })
-    .then((response) => response.json())
-    .then((updatedTask) => {
-      setTasks((prevTasks) => prevTasks.map(t => t.id === updatedTask.id ? updatedTask : t))
-    })
+    setTasks((prevTasks) => prevTasks.map(t => t.id === task.id ? task : t))
+    writeData(roomId, task.id, task.title, task.description, task.status, task.priority, task.points, task.image)
   }
 
   const addTask = (status: Status, title: string, priorityIndex: number, description: string, image: string | null) => {
@@ -80,29 +42,13 @@ const App = () => {
       points: 0,
       image: image
     }
-    fetch(`${API_URL}/rooms/${roomId}/tasks`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newTask)
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setTasks([...tasks, data])
-    })
+    setTasks([...tasks, newTask])
+    writeData(roomId, newTask.id, newTask.title, newTask.description, newTask.status, newTask.priority, newTask.points, newTask.image)
   }
 
   const deleteTask = (taskId: string) => {
-    fetch(`${API_URL}/rooms/${roomId}/tasks/${taskId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(() => {
-      setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId))
-    })
+    setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId))
+    writeData(roomId, taskId, null, null, null, null, null, null) // Remove task from Firebase
   }
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, status: Status) => {
@@ -162,7 +108,7 @@ const App = () => {
         </div>
 
         {/* Columns Grid */}
-        <div className="max-w-7xl mx-auto"></div>
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {columns.map((column) => (
               <div 
@@ -215,6 +161,7 @@ const App = () => {
           </div>
         </div>
       </div>
+    </div>
   )
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Layout } from 'lucide-react'
 
+
 const ActionButton = ({ to, primary, children }) => (
   <Link 
     to={to}
@@ -23,6 +24,7 @@ const NavBar = () => {
     <nav className="container mx-auto px-6 py-2 ">
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-2">
+          <img src='/src' alt="/WorkFlow" className='h-8 w-auto' />
           <a href="/home">
             <span className="text-xl font-bold text-gray-900">WorkFlow</span>
           </a>

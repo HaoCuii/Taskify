@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Users } from 'lucide-react'
 
-const API_URL = 'https://workflow-tasks.vercel.app'
-
 const Join = () => {
   const [roomId, setRoomId] = useState('')
   const navigate = useNavigate()

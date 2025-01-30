@@ -1,8 +1,15 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Loader2, ArrowLeft } from 'lucide-react'
+import { doc, setDoc } from 'firebase/firestore'
+import { writeData } from '../../firebase'
 
-const API_URL = 'https://workflow-tasks.vercel.app'
+
+const generateRoomId = () => {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const code = Array.from({ length: 6 }, () => letters[Math.floor(Math.random() * letters.length)]).join('');
+  return code;
+};
 
 const Create = () => {
   const navigate = useNavigate()
@@ -11,16 +18,27 @@ const Create = () => {
 
   const handleCreateRoom = async () => {
     try {
-      console.log({API_URL})
       setIsLoading(true)
       setError('')
-      const response = await fetch(`${API_URL}/create`, {
-        method: 'POST',
-      })
-      if (!response.ok) throw new Error('Failed to create room')
-      const data = await response.json()
-      navigate(`/room/${data.roomId}`)
+      const roomId = generateRoomId()
+
+      writeData(roomId, 'Task-1', 'Prepare Marketing Plan', 
+      'Create a detailed marketing plan for the next quarter to increase brand awareness and drive sales.',
+      'in-progress', 'high', 0, null)
+
+      writeData(roomId, 'Task-2', 'Develop Website Homepage', 
+      'Design and develop the website\'s homepage with a modern and user-friendly UI, optimizing it for mobile.',
+      'todo', 'high', 0, null);
+      
+
+      writeData(roomId, 'Task-3', 'Write Monthly Newsletter',
+        'Write and send the monthly newsletter detailing the company\'s achievements, updates, and upcoming events.',
+        'todo', 'medium', 0, null);
+      
+
+      navigate(`/room/${roomId}`)
     } catch (err) {
+      console.error('Error creating room:', err)
       setError('Failed to create room. Please try again.')
     } finally {
       setIsLoading(false)
