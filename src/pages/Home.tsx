@@ -39,7 +39,8 @@ const ActionButton = ({ to, primary, children }) => (
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen relative">
+      <AnimatedBackground />
 
       {/* Hero Section */}
       <div className="container mx-auto px-6 py-20 text-center">
