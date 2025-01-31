@@ -11,6 +11,9 @@ import {
   Zap
 } from 'lucide-react';
 
+import AnimatedBackground from '../components/AnimatedBackground';
+
+
 const FeatureCard = ({ icon: Icon, title, description, color }) => (
   <div className="group bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
     <div className={`${color} w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
