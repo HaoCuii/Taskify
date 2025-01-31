@@ -1,9 +1,8 @@
 # Workflow
 
 ## **Overview**
-Workflow is a full-stack, responsive web application that allows users to collaborate on tasks in real-time. Built with React and Tailwind CSS for the frontend, and Firebase Realtime Database for the backend, the app provides a seamless, dynamic platform for creating and joining rooms to work together efficiently.
-
-The primary features include creating rooms, joining rooms, and real-time task collaboration, making it an ideal tool for teams and individuals looking to manage tasks collaboratively in a fluid, real-time environment.
+Workflow is a full-stack, responsive web application that allows users to collaborate on tasks in real-time. Built with React and Tailwind CSS for the frontend, and Firebase Realtime Database for the backend.
+The primary features include creating rooms, joining rooms, and real-time task collaboration, making it an ideal tool for teams and individuals looking to manage tasks collaboratively in a fluid, real-time environment. 
 
 ---
 
@@ -14,6 +13,7 @@ The primary features include creating rooms, joining rooms, and real-time task c
 - **Task Management**: Users can create, edit, and delete tasks with real-time synchronization across all connected clients.
 - **Responsive Design**: Fully responsive design, optimized for mobile, tablet, and desktop devices.
 - **User-friendly Interface**: Clean, modern design built with Tailwind CSS for fast and customizable styling.
+- **Unique animated background effect**: Added to really make the website stand out from many others.
 
 ---
 
@@ -26,11 +26,9 @@ The primary features include creating rooms, joining rooms, and real-time task c
 
 ### **Backend**:
 - **Firebase Realtime Database**: A NoSQL cloud database for storing room data and task lists in real-time.
-- **Firebase Authentication**: For managing user sign-up and login securely.
 
 ### **Deployment**:
-- **Vercel** or **Netlify**: For frontend deployment.
-- **Firebase Hosting**: For backend hosting (if needed).
+- **Vercel**: For frontend deployment.
 
 ---
 
@@ -38,8 +36,8 @@ The primary features include creating rooms, joining rooms, and real-time task c
 
 ### **Prerequisites**
 - Node.js (v14 or higher)
-- npm or yarn
-- Firebase Account (to set up Firebase Realtime Database and Authentication)
+- npm
+- Firebase Account (to set up Firebase Realtime Database)
 
 ### **Steps to Run Locally**
 1. **Clone the Repository**:
@@ -56,7 +54,7 @@ The primary features include creating rooms, joining rooms, and real-time task c
 3. **Set Up Firebase**:
     - Go to the [Firebase Console](https://console.firebase.google.com/).
     - Create a new Firebase project.
-    - Set up Firebase Realtime Database and Firebase Authentication in your Firebase project.
+    - Set up Firebase Realtime Database in your Firebase project.
     - Download the Firebase config file and add it to your project as `firebaseConfig.js` in the `src/` folder.
     - Replace the values in the config file with your Firebase project's keys.
 
@@ -66,15 +64,38 @@ The primary features include creating rooms, joining rooms, and real-time task c
     ```
     Your application should now be running at [http://localhost:3000](http://localhost:3000).
 
-### **Firebase Configuration Example (firebaseConfig.js)**
+5 **Run Frontend Server**
+    ```bash
+    npm run dev
+    ```
+    Your application should be working in [http://localhost:5173/](http://localhost:5173/).
+    
 
-```javascript
-export const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-auth-domain",
-  databaseURL: "your-database-url",
-  projectId: "your-project-id",
-  storageBucket: "your-storage-bucket",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
-};
+## **Contributing**
+
+We welcome contributions to improve **Workflow**! If you'd like to contribute, please follow these steps:
+
+1. **Fork the repository**.
+2. **Create a new branch**:
+    ```bash
+    git checkout -b feature-name
+    ```
+3. **Make your changes**.
+4. **Commit your changes**:
+    ```bash
+    git commit -am 'Add feature'
+    ```
+5. **Push to the branch**:
+    ```bash
+    git push origin feature-name
+    ```
+6. **Open a pull request** with a description of your changes.
+
+Please ensure your code follows the existing style, and feel free to open issues if you have any questions or suggestions.
+
+---
+
+## **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
